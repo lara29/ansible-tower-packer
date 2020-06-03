@@ -1,0 +1,33 @@
+{   
+    "variables": {
+        "hostname": "ansible-tower-01",
+        "format": "qcow2",
+        "tower_latest_release_url": "https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-latest.tar.gz"
+    },
+
+    "builders": [
+        {
+            "type": "qemu",
+            "iso_url": "iso/centos-base.qcow2",
+            "iso_checksum_type": "none",
+            "disk_image": true,
+            "use_backing_file": true,
+            "disk_size": 5120,
+            "headless": true,
+            "disk_interface": "virtio-scsi",
+            "output_directory": "build",
+            "disk_compression": true,
+            "shutdown_command": "systemctl poweroff",
+            "disk_discard": "unmap",
+            "ssh_username": "centos",
+            "ssh_password": "centos",
+            "ssh_timeout": "10m",
+            "http_directory": "cloud-data",
+            "qemuargs": [
+              ["-smbios", "type=1,serial=ds=nocloud-net;instance-id=packer;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/"]
+            ],
+            "use_default_display": true,
+            "vm_name": "centos-8-amd64.{{ user `format` }}"
+        }
+    ]
+}
